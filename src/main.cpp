@@ -60,12 +60,12 @@ int main() {
 #endif
 #ifndef ONE_PARTICLE_ONLY
 	double NrParticles =  27;//100;
-	double NrDimer=2;
+	double NrDimer=0;
 #endif
 
 	double ratio = 0.0;
 
-	double epsfParticle = 0.0;// 100.0;
+	double epsfParticle = 6.0;// 100.0;
 	double epsrParticle = 0.0;//ratio*epsfParticle;
 	 // eps_f= ratio * eps_r
 

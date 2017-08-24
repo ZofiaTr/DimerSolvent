@@ -12,7 +12,7 @@ Simulation::Simulation(int NrParticles){
 	NumberOfEquilibrationSteps = 0;//
 
 
-	WritingPeriodOnScreen = 1000000;//for simulations on cluster use 100000000;
+	WritingPeriodOnScreen = 10000;//for simulations on cluster use 100000000;
 	WritingPeriodFile = 100000;
 	WritingPeriodBlockaveraging = 10;//10;
 

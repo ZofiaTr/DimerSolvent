@@ -52,7 +52,7 @@ NeighborSearchGridPBC::NeighborSearchGridPBC(const std::vector<Particle*>& nodeV
 	}
 
 	// allocate memory
-	
+
 	grid=new SBHashMap<GridKey,GridCell*,GridKeyFunctor,GridKeyComparator>;
 	gridKeyVector=new SBVector<GridKey>(nParticles);
 
@@ -73,8 +73,8 @@ NeighborSearchGridPBC::NeighborSearchGridPBC(const std::vector<Particle*>& nodeV
 
 		GridCell* gridCell=0;
 		grid->getValue(gridKey,gridCell);
-		
-		if (gridCell!=0) 
+
+		if (gridCell!=0)
 			gridCell->addParticle(currentParticle);
 		else {
 
@@ -110,16 +110,16 @@ void NeighborSearchGridPBC::getCellCoordinates(Vector const& currentPosition, Ve
 	int x = (int)floor(currentPosition.v[0]*(*inverseCutoffDistance));
 	int y = (int)floor(currentPosition.v[1]*(*inverseCutoffDistance));
 	int z = (int)floor(currentPosition.v[2]*(*inverseCutoffDistance));
-	
+
 	// x
 	int gridKeyMostLeftX = (int)floor((boxPBC->i[0].i[0])*(*inverseCutoffDistance));
 	int gridKeyMostRightX = (int)floor((boxPBC->i[0].i[1])*(*inverseCutoffDistance));
 
 	// most left x
-	if (x == gridKeyMostLeftX && (fabs(gridKeyMostLeftX*(*cutoffDistance) - boxPBC->i[0].i[0]) > 0.1))
+	if ((x == gridKeyMostLeftX) && (fabs(gridKeyMostLeftX*(*cutoffDistance) - boxPBC->i[0].i[0]) > 0.1))
 		x+=1;
 	// most right x
-	else if (x == gridKeyMostRightX && (fabs((gridKeyMostRightX+1)*(*cutoffDistance) - boxPBC->i[0].i[1]) > 0.1))
+	else if ((x == gridKeyMostRightX) && (fabs((gridKeyMostRightX+1)*(*cutoffDistance) - boxPBC->i[0].i[1]) > 0.1))
 		x-=1;
 
 	// y
@@ -127,10 +127,10 @@ void NeighborSearchGridPBC::getCellCoordinates(Vector const& currentPosition, Ve
 	int gridKeyMostRightY = (int)floor((boxPBC->i[1].i[1])*(*inverseCutoffDistance));
 
 	// most left y
-	if (y == gridKeyMostLeftY && (fabs(gridKeyMostLeftY*(*cutoffDistance) - boxPBC->i[1].i[0]) > 0.1))
+	if ((y == gridKeyMostLeftY) && (fabs(gridKeyMostLeftY*(*cutoffDistance) - boxPBC->i[1].i[0]) > 0.1))
 		y+=1;
 	// most right y
-	else if (y == gridKeyMostRightY && (fabs((gridKeyMostRightY+1)*(*cutoffDistance) - boxPBC->i[1].i[1]) > 0.1))
+	else if ((y == gridKeyMostRightY) && (fabs((gridKeyMostRightY+1)*(*cutoffDistance) - boxPBC->i[1].i[1]) > 0.1))
 		y-=1;
 
 	// z
@@ -220,8 +220,8 @@ void NeighborSearchGridPBC::checkCell(GridCell* gridCellJ, int i, std::set<unsig
 			replica = true;
 			correctDistanceWithPBC(distance);
 
-			if (distance.norm2() > (*cutoffDistanceSquared)) 
-				continue;		
+			if (distance.norm2() > (*cutoffDistanceSquared))
+				continue;
 
 		}
 
@@ -233,7 +233,7 @@ void NeighborSearchGridPBC::checkCell(GridCell* gridCellJ, int i, std::set<unsig
 
 		neighbors.insert(particleJIndex);
 
-	} 
+	}
 
 }
 
@@ -243,7 +243,7 @@ void NeighborSearchGridPBC::checkCellsCross(GridCell* gridCellI, GridCell* gridC
 	unsigned int nParticlesJ=gridCellJ->particleIndex->size();
 
 	for (unsigned int i=0; i<nParticlesI; i++) {
-	
+
 		Particle* particleI=gridCellI->particleIndex->getObject(i);
 		unsigned int particleIIndex=particleIndex->getIndex(particleI);
 		Vector const& positionI=(*positionBuffer)[particleIIndex];
@@ -258,13 +258,13 @@ void NeighborSearchGridPBC::checkCellsCross(GridCell* gridCellI, GridCell* gridC
 			Particle* particleJ=gridCellJ->particleIndex->getObject(j);
 			unsigned int particleJIndex=particleIndex->getIndex(particleJ);
 
-			if (gridCellI == gridCellJ && particleJIndex<=particleIIndex) 
+			if (gridCellI == gridCellJ && particleJIndex<=particleIIndex)
 				continue;
 
 			Vector const& positionJ=(*positionBuffer)[particleJIndex];
 			if (!particleInTheBox(positionJ)) {
 				std::cout << "particle out !\n";
-				positionJ.print();			
+				positionJ.print();
 				continue;
 			}
 
@@ -276,15 +276,15 @@ void NeighborSearchGridPBC::checkCellsCross(GridCell* gridCellI, GridCell* gridC
 				replica = true;
 				correctDistanceWithPBC(distance);
 
-				if (distance.norm2() > (*cutoffDistanceSquared)) 
-					continue;		
+				if (distance.norm2() > (*cutoffDistanceSquared))
+					continue;
 
 			}
 
 			(*neighborIndexBuffer)[particleIIndex]->push_back(particleJ);
 			(*neighborIndexBuffer)[particleJIndex]->push_back(particleI);
 
-		} 
+		}
 
 	}
 
@@ -309,12 +309,12 @@ void NeighborSearchGridPBC::updateLists() {
 			// check whether particle belongs to the box
 
 			unsigned int particleIIndex = positionBuffer->getChangedElementIndex(i);
-			
+
 			if (!particleInTheBox((*positionBuffer)[particleIIndex])) continue;
 
 			checkCellsAroundBigBox((*gridKeyVector)[particleIIndex], particleIIndex);
 
-		}		
+		}
 
 	}
 	else  {
@@ -360,7 +360,7 @@ void NeighborSearchGridPBC::updateNeighborLists() {
 
 	unsigned int nChangedParticles=positionBuffer->getNumberOfChangedElements();
 		//std::cout << nChangedParticles << std::endl;
-	
+
 	// prune the list of neighbors of particles (because of particles which have moved apart)
 
 	for (unsigned int i = 0; i<nChangedParticles; i++) {
@@ -370,7 +370,7 @@ void NeighborSearchGridPBC::updateNeighborLists() {
 		Vector const& positionI=(*positionBuffer)[particleIIndex];
 
 		SBCContainerIndex<Particle*>* neighborIndexI=(*neighborIndexBuffer)[particleIIndex];
-	
+
 		unsigned int j=0;
 
 		while (j<neighborIndexI->size()) {
@@ -379,7 +379,7 @@ void NeighborSearchGridPBC::updateNeighborLists() {
 			unsigned int particleJIndex=particleIndex->getIndex(particleJ);
 			Vector const& positionJ = (*positionBuffer)[particleJIndex];
 
-			if ((positionJ-positionI).norm2()<=(*cutoffDistanceSquared)) 
+			if ((positionJ-positionI).norm2()<=(*cutoffDistanceSquared))
 				j++; // keep this neighbor
 			else {
 
@@ -458,12 +458,12 @@ void NeighborSearchGridPBC::print(unsigned int offset) const {
 	for (unsigned int i=0;i<nParticles;i++) {
 
 		SBCContainerIndex<Particle*>* neighborIndexI=(*neighborIndexBuffer)[i];
-		
+
 		if (neighborIndexI->size() > 0)
 		//std::cout << "Neighbor pair: " << i << std::endl;
 
 		for (unsigned int j=0;j<neighborIndexI->size();j++) {
-			
+
 			std::cout << "Neighbor pair: " << i << " " << particleIndex->getIndex(neighborIndexI->getObject(j)) << std::endl;
 			//std::cout <<   particleIndex->getIndex(neighborIndexI->getObject(j)) << ", ";
 			nPairs++;
@@ -477,7 +477,7 @@ void NeighborSearchGridPBC::print(unsigned int offset) const {
 
 	std::cout << "Number of changed: " << positionBuffer->getNumberOfChangedElements() << std::endl << std::endl;
 
-	
+
 }
 
 
@@ -490,8 +490,8 @@ void NeighborSearchGridPBC::flushPositionBuffer() {
 
 bool NeighborSearchGridPBC::cellInTheBox(GridKey& gridKey) {
 
-	return 
-		((gridKey.x+1)*(*cutoffDistance) <= boxPBC->i[0].i[1]) && (gridKey.x*(*cutoffDistance) >= boxPBC->i[0].i[0])		
+	return
+		((gridKey.x+1)*(*cutoffDistance) <= boxPBC->i[0].i[1]) && (gridKey.x*(*cutoffDistance) >= boxPBC->i[0].i[0])
 		&&
 		((gridKey.y+1)*(*cutoffDistance) <= boxPBC->i[1].i[1]) && (gridKey.y*(*cutoffDistance) >= boxPBC->i[1].i[0])
 		&&
@@ -517,9 +517,9 @@ bool NeighborSearchGridPBC::cellCrossesTheBox(GridKey& gridKey) {
 }
 
 bool NeighborSearchGridPBC::cellOutsideTheBox(GridKey& gridKey) {
-	
+
 	return
-		
+
 		((gridKey.x + 1)*(*cutoffDistance) <= boxPBC->i[0].i[0]) || (gridKey.x*(*cutoffDistance) >= boxPBC->i[0].i[1])
 		||
 		((gridKey.y + 1)*(*cutoffDistance) <= boxPBC->i[1].i[0]) || (gridKey.y*(*cutoffDistance) >= boxPBC->i[1].i[1])
@@ -583,7 +583,7 @@ void NeighborSearchGridPBC::getMirrorCellKey(GridKey& gridKey, GridKey& gridKeyM
 	//else if (gridKey.x*(*cutoffDistance) <= boxPBC->i[0].i[0]) {
 	//	// most left x
 	//	gridKeyMirror.x = (int)floor((boxPBC->i[0].i[1])*(*inverseCutoffDistance));
-	//	if (fabs(gridKeyMirror.x*(*cutoffDistance) - boxPBC->i[0].i[0]) > 0.1) 
+	//	if (fabs(gridKeyMirror.x*(*cutoffDistance) - boxPBC->i[0].i[0]) > 0.1)
 	//		gridKeyMirror.x--;
 	//}
 
@@ -597,7 +597,7 @@ void NeighborSearchGridPBC::getMirrorCellKey(GridKey& gridKey, GridKey& gridKeyM
 	//else if (gridKey.y*(*cutoffDistance) <= boxPBC->i[1].i[0]) {
 	//	// most left y
 	//	gridKeyMirror.y = (int)floor((boxPBC->i[1].i[1])*(*inverseCutoffDistance));
-	//	if (fabs(gridKeyMirror.y*(*cutoffDistance) - boxPBC->i[1].i[0]) > 0.1) 
+	//	if (fabs(gridKeyMirror.y*(*cutoffDistance) - boxPBC->i[1].i[0]) > 0.1)
 	//		gridKeyMirror.y--;
 	//}
 
@@ -611,7 +611,7 @@ void NeighborSearchGridPBC::getMirrorCellKey(GridKey& gridKey, GridKey& gridKeyM
 	//else if (gridKey.z*(*cutoffDistance) <= boxPBC->i[2].i[0]) {
 	//	// most left z
 	//	gridKeyMirror.z = (int)floor((boxPBC->i[2].i[1])*(*inverseCutoffDistance));
-	//	if (fabs(gridKeyMirror.z*(*cutoffDistance) - boxPBC->i[2].i[0]) > 0.1) 
+	//	if (fabs(gridKeyMirror.z*(*cutoffDistance) - boxPBC->i[2].i[0]) > 0.1)
 	//		gridKeyMirror.z--;
 	//}
 
@@ -686,27 +686,27 @@ void NeighborSearchGridPBC::checkCellsAroundSmallBox(GridKey& gridKeyI, int i) {
 
 				// real cell inside the box
 				if (cellInTheBox(gridKeyJ)) {
-					
+
 					GridCell* gridCellJ=0;
-					// if cell exists			
-					if (grid->getValue(gridKeyJ,gridCellJ)) {						
+					// if cell exists
+					if (grid->getValue(gridKeyJ,gridCellJ)) {
 						checkCell(gridCellJ, i, neighbors);
 					}
 
 				}
-				
+
 				// mirror cell
 				else {
-					
+
 					GridKey gridKeyJMirror;
-					getMirrorCellKey(gridKeyJ, gridKeyJMirror);					
+					getMirrorCellKey(gridKeyJ, gridKeyJMirror);
 
 					// check mirror cell
-					GridCell* gridCellJMirror=0;			
-					if (grid->getValue(gridKeyJMirror,gridCellJMirror)) {															
+					GridCell* gridCellJMirror=0;
+					if (grid->getValue(gridKeyJMirror,gridCellJMirror)) {
 						checkCell(gridCellJMirror, i, neighbors);
 					}
-				
+
 				}
 
 			} // z loop
@@ -729,30 +729,30 @@ void NeighborSearchGridPBC::checkCellsAroundBigBox(GridKey& gridKeyI, int i) {
 			for (int z=gridKeyI.z-1;z<=gridKeyI.z+1;z++) {
 
 				// get the neighbouring cell J
-				GridKey gridKeyJ(x,y,z);				
+				GridKey gridKeyJ(x,y,z);
 
 				// real cell inside the box
 				if (cellInTheBox(gridKeyJ)) {
-					
+
 					GridCell* gridCellJ=0;
-					// if cell exists			
-					if (grid->getValue(gridKeyJ,gridCellJ)) 						
-						checkCell(gridCellJ, i, neighbors);						
+					// if cell exists
+					if (grid->getValue(gridKeyJ,gridCellJ))
+						checkCell(gridCellJ, i, neighbors);
 
 				}
 
 				// mirror cell
 				else {
-					
+
 					GridKey gridKeyJMirror;
-					getMirrorCellKey(gridKeyJ, gridKeyJMirror);					
+					getMirrorCellKey(gridKeyJ, gridKeyJMirror);
 
 					if ((abs(gridKeyJMirror.x-gridKeyI.x) > 1 || abs(gridKeyJMirror.y-gridKeyI.y) > 1) || abs(gridKeyJMirror.z-gridKeyI.z) > 1) {
 						// check mirror cell
-						GridCell* gridCellJMirror=0;			
-						if (grid->getValue(gridKeyJMirror,gridCellJMirror)) 
+						GridCell* gridCellJMirror=0;
+						if (grid->getValue(gridKeyJMirror,gridCellJMirror))
 							checkCell(gridCellJMirror, i, neighbors);
-						
+
 					}
 
 				}
@@ -790,15 +790,15 @@ void NeighborSearchGridPBC::checkCellsAroundCellByCell() {
 						continue;
 
 					// get the neighbouring cell J
-					GridKey gridKeyJ(x,y,z);				
+					GridKey gridKeyJ(x,y,z);
 
 					// real cell inside the box
 					if (cellInTheBox(gridKeyJ)) {
 
 						GridCell* gridCellJ=0;
-						// if cell exists			
-						if (grid->getValue(gridKeyJ,gridCellJ)) 						
-							checkCellsCross(gridCellI, gridCellJ);			
+						// if cell exists
+						if (grid->getValue(gridKeyJ,gridCellJ))
+							checkCellsCross(gridCellI, gridCellJ);
 
 					}
 
@@ -806,13 +806,13 @@ void NeighborSearchGridPBC::checkCellsAroundCellByCell() {
 					else {
 
 						GridKey gridKeyJMirror;
-						getMirrorCellKey(gridKeyJ, gridKeyJMirror);					
+						getMirrorCellKey(gridKeyJ, gridKeyJMirror);
 
 						if ((abs(gridKeyJMirror.x-gridKeyI.x) > 1 || abs(gridKeyJMirror.y-gridKeyI.y) > 1) || abs(gridKeyJMirror.z-gridKeyI.z) > 1) {
 							// check mirror cell
-							GridCell* gridCellJMirror=0;			
-							if (grid->getValue(gridKeyJMirror,gridCellJMirror)) 
-								checkCellsCross(gridCellI, gridCellJMirror);		
+							GridCell* gridCellJMirror=0;
+							if (grid->getValue(gridKeyJMirror,gridCellJMirror))
+								checkCellsCross(gridCellI, gridCellJMirror);
 
 						}
 
@@ -835,8 +835,8 @@ void NeighborSearchGridPBC::signalPositionUpdate(Particle* particle) {
 
 }
 
-SBCContainerIndex<Particle*> const* NeighborSearchGridPBC::getNeighborIndex(unsigned int i) { 
-	return (*neighborIndexBuffer)[i]; 
+SBCContainerIndex<Particle*> const* NeighborSearchGridPBC::getNeighborIndex(unsigned int i) {
+	return (*neighborIndexBuffer)[i];
 }
 
 SBCContainerIndex<Particle*> const* NeighborSearchGridPBC::getNeighborIndex(Particle* structuralParticle) {
