@@ -11,7 +11,7 @@
 #define ERROR_ANALYSIS_INDEPENDENT_REPLICAS
 
 //#define INPUT_TIME_STEP_SIZE
-#define INPUT_ARPS_PARAMETERS
+//#define INPUT_ARPS_PARAMETERS
 
 //#define INPUT_ARPS_PARAMETERS_AND_DT_FROM_MATRIX
 
@@ -59,14 +59,14 @@ int main() {
 
 #endif
 #ifndef ONE_PARTICLE_ONLY
-	double NrParticles =  9;//100;
+	double NrParticles =  27;//100;
 	double NrDimer=0;
 #endif
 
 	//double ratio = 0.0;
 
 	double epsfParticle = 2.0;// 100.0;
-	double epsrParticle = 2.0;//ratio*epsfParticle;
+	double epsrParticle = 0.0;//ratio*epsfParticle;
 	 // eps_f= ratio * eps_r
 
 #ifndef INPUT_TIME_STEP_SIZE
@@ -107,7 +107,7 @@ int main() {
 	//INPUT_epsF >> epsfParticle >> std::ws;
 	INPUT_delta >> epsrParticle >> std::ws;
 
-	//epsrParticle = ratio;//*epsfParticle;
+	//epsrParticle = 0.0;//ratio;//*epsfParticle;
 
 	// if (epsrParticle > epsfParticle) {
 	//

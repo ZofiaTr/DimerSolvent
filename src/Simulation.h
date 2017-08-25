@@ -22,10 +22,10 @@ class NeighborSearchGridPBC;
 //#define SPLINE_FIRST_ORDER
 //#define SPLINE_SECOND_ORDER
 //#define SPLINE_THIRD_ORDER
-//#define SPLINE_FOURTH_ORDER
+#define SPLINE_FOURTH_ORDER
 //#define EXP_PERTUBATION
 //#define QUARTIC_POLYNOMIAL
-#define POLYNOMIAL_POWERS
+//#define POLYNOMIAL_POWERS
 
 //#define GAMMA_ANALYSIS //goes with metropolis !!!
 //#define WRITE_INSTANT_REJECTION_RATE
@@ -134,6 +134,7 @@ class NeighborSearchGridPBC;
 
 #define METROPOLIZATION //can stand (uncomment) alone
 #define METROPOLIS_FDR
+
 //#define METROPOLIS_FDR_ADAPTIVE
 
 //#define METROPOLIS_LANGEVIN
