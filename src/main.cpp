@@ -11,7 +11,7 @@
 #define ERROR_ANALYSIS_INDEPENDENT_REPLICAS
 
 //#define INPUT_TIME_STEP_SIZE
-//#define INPUT_ARPS_PARAMETERS
+#define INPUT_ARPS_PARAMETERS
 
 //#define INPUT_ARPS_PARAMETERS_AND_DT_FROM_MATRIX
 
@@ -59,14 +59,14 @@ int main() {
 
 #endif
 #ifndef ONE_PARTICLE_ONLY
-	double NrParticles =  27;//100;
+	double NrParticles =  9;//100;
 	double NrDimer=0;
 #endif
 
-	double ratio = 0.0;
+	//double ratio = 0.0;
 
-	double epsfParticle = 6.0;// 100.0;
-	double epsrParticle = 0.0;//ratio*epsfParticle;
+	double epsfParticle = 2.0;// 100.0;
+	double epsrParticle = 2.0;//ratio*epsfParticle;
 	 // eps_f= ratio * eps_r
 
 #ifndef INPUT_TIME_STEP_SIZE
@@ -267,8 +267,8 @@ int main() {
 	//	std::cout<<"epsParticle="<<epsrParticle<<std::endl;
 
 	// time variables
-	double t0=0.;
-	double time_for_trajectory=0.;
+	//double t0=0.;
+	//double time_for_trajectory=0.;
 
 	int numberOfSamples = NUMBER_OF_AVERAGES;
 	double*samplesVector = new double[numberOfSamples];
@@ -577,13 +577,13 @@ int main() {
 	}
 
 
-	delete varianceArray;
-	delete varianceArray2;
-	delete dtArray;
-	delete samplesVector;
-	delete averageValueReplica;
-	delete averageValueReplicaTwo;
-	delete averageValueReplicaThree;
+	delete[] varianceArray;
+	delete[] varianceArray2;
+	delete[] dtArray;
+	delete[] samplesVector;
+	delete[] averageValueReplica;
+	delete[] averageValueReplicaTwo;
+	delete[] averageValueReplicaThree;
 
 #endif
 	//endif optimal_parameters

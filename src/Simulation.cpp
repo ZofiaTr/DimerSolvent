@@ -12,7 +12,7 @@ Simulation::Simulation(int NrParticles){
 	NumberOfEquilibrationSteps = 0;//
 
 
-	WritingPeriodOnScreen = 10000;//for simulations on cluster use 100000000;
+	WritingPeriodOnScreen = 100000000;//for simulations on cluster use 100000000;
 	WritingPeriodFile = 100000;
 	WritingPeriodBlockaveraging = 10;//10;
 
@@ -1611,7 +1611,17 @@ double Simulation::Hp(double px, double py, double pz, double mass, double epsrp
 #ifdef QUARTIC_POLYNOMIAL
 
 	return pow((px*px + py*py + pz*pz),2.0) *0.25 /mass;
+
 #endif
+
+#ifdef POLYNOMIAL_POWERS
+
+	 double r = sqrt(px*px + py*py + pz*pz);
+
+	 return pow(r, epsfp)  /(epsfp);
+
+#endif
+
 
 	double Ux = Hpx(px, mass, epsrp, epsfp);
 	double Uy = Hpx(py, mass, epsrp, epsfp);
@@ -1847,6 +1857,15 @@ double Simulation::dHdp(double px, double py, double pz, double mass, double eps
  return (px*px + py*py + pz*pz) * px /mass;
 
 #endif
+
+#ifdef POLYNOMIAL_POWERS
+
+double r = sqrt(px*px + py*py + pz*pz);
+
+ return pow(r, epsfp-1.0) *px/r ;//sign(px)*pow(fabs(px), epsfp-1.0) /mass;
+
+#endif
+
 	#ifdef EXP_PERTUBATION
 
 			return (px / mass) * (1.0 - epsfp * exp( - 0.5 * px*px / mass))   ;
@@ -2550,6 +2569,21 @@ void Simulation::setSimulationParameters(double NrOfTimeSteps, double TimeStepSi
 			epsr[i] = 0.0;// ((double)i) / 10;//er;
 			epsf[i] = ef;// ((double)i) * 3 / 10;// ef;
 		}
+
+		#ifdef POLYNOMIAL_POWERS
+		if (i < NumberOfDimerParticles){
+
+			epsr[i] = 0.0;// ((double)i) / 10;//0;
+			epsf[i] = ef;// ((doublFe)i) * 3 / 10;// 0;
+
+		}
+		else{
+
+
+			epsr[i] = 0.0;// ((double)i) / 10;//er;
+			epsf[i] = ef;// ((double)i) * 3 / 10;// ef;
+		}
+		#endif
 
 	}
 
